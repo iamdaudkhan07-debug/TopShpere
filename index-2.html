@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TopSphere — Discover the Top 10 of Everything</title>
+<meta name="description" content="TopSphere — Discover the Top 10 of everything, from technology and brands to people, places and entertainment.">
+<meta name="theme-color" content="#0a0a0c">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>">
+<style>
+:root{
+  --bg:#0a0a0c; --bg2:#121216; --card:#15151a; --line:#2a2620;
+  --gold:#d4af37; --champ:#f7e7ce; --muted:#9a948a; --text:#f3efe8;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  background:radial-gradient(1200px 600px at 50% -10%,#1f1a0e 0%,var(--bg) 60%) fixed,var(--bg);
+  color:var(--text);font-family:Inter,"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  min-height:100vh;line-height:1.5;
+}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+header{padding:44px 0 22px;text-align:center}
+.logo{font-size:13px;letter-spacing:.35em;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+h1{font-size:clamp(34px,8vw,64px);font-weight:800;letter-spacing:-.02em;
+  background:linear-gradient(135deg,#fff4d6,var(--gold) 55%,#a9831c);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tag{color:var(--muted);margin:10px auto 0;max-width:560px;font-size:15px}
+.search{position:relative;max-width:520px;margin:26px auto 6px}
+.search input{
+  width:100%;padding:15px 18px 15px 48px;border-radius:999px;border:1px solid var(--line);
+  background:var(--bg2);color:var(--text);font-size:16px;outline:none;transition:.25s
+}
+.search input:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(212,175,55,.12)}
+.search svg{position:absolute;left:18px;top:50%;transform:translateY(-50%);width:20px;height:20px;stroke:var(--gold);fill:none;stroke-width:2}
+.count{text-align:center;color:var(--muted);font-size:13px;margin:12px 0 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;padding-bottom:50px}
+.card{
+  background:linear-gradient(160deg,var(--card),#0f0f13);border:1px solid var(--line);border-radius:18px;
+  padding:20px 14px;text-align:center;cursor:pointer;color:inherit;font:inherit;
+  transition:transform .25s,border-color .25s,box-shadow .25s;display:flex;flex-direction:column;align-items:center;gap:8px
+}
+.card:hover,.card:focus-visible{transform:translateY(-4px);border-color:var(--gold);box-shadow:0 10px 30px rgba(212,175,55,.15);outline:none}
+.card:active{transform:scale(.97)}
+.ico{font-size:34px;filter:drop-shadow(0 4px 10px rgba(212,175,55,.25))}
+.top10{font-size:11px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+.ctitle{font-weight:600;font-size:15px;color:var(--champ)}
+.empty{text-align:center;color:var(--muted);padding:40px 0;display:none}
+/* topic page */
+#topic{display:none;padding:22px 0 60px}
+.back{
+  display:inline-flex;align-items:center;gap:8px;background:none;border:1px solid var(--line);color:var(--champ);
+  padding:10px 18px;border-radius:999px;font-size:14px;cursor:pointer;transition:.25s
+}
+.back:hover{border-color:var(--gold);color:var(--gold)}
+.thead{text-align:center;margin:28px 0 24px}
+.thead .ico{font-size:52px}
+.thead h2{font-size:clamp(26px,6vw,42px);margin-top:6px;color:var(--champ)}
+.thead h2 span{color:var(--gold)}
+.thead p{color:var(--muted);font-size:14px;margin-top:6px}
+ol.list{list-style:none;max-width:720px;margin:0 auto;display:grid;gap:12px}
+.item{
+  display:flex;align-items:center;gap:16px;background:linear-gradient(160deg,var(--card),#0f0f13);
+  border:1px solid var(--line);border-radius:16px;padding:14px 18px;
+  opacity:0;transform:translateY(12px);animation:in .5s forwards
+}
+@keyframes in{to{opacity:1;transform:none}}
+.rank{
+  min-width:50px;height:50px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:20px;
+  background:#1c1a14;border:1px solid var(--line);color:var(--gold)
+}
+.item:nth-child(1) .rank{background:linear-gradient(135deg,#f5d77a,#b8901f);color:#1a1400;border:none}
+.item:nth-child(2) .rank{background:linear-gradient(135deg,#e9e9ee,#9ea0a8);color:#15151a;border:none}
+.item:nth-child(3) .rank{background:linear-gradient(135deg,#e0a46a,#99602b);color:#1c1000;border:none}
+.item:nth-child(1){border-color:rgba(212,175,55,.6)}
+.name{font-weight:700;font-size:17px}
+.note{color:var(--muted);font-size:13px}
+.disc{max-width:720px;margin:26px auto 0;text-align:center;color:var(--muted);font-size:12px}
+footer{border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:12px;padding:22px 16px 34px}
+footer b{color:var(--gold)}
+@media(max-width:420px){.grid{grid-template-columns:repeat(2,1fr);gap:10px}.card{padding:16px 8px}.ctitle{font-size:13.5px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="home">
+    <header>
+      <div class="logo">★ TopSphere ★</div>
+      <h1>Top 10 of Everything</h1>
+      <p class="tag">Technology, brands, people, places and entertainment — tap a card to see the ranking.</p>
+      <p class="tag" style="font-size:12px;letter-spacing:.15em;color:var(--gold)"><i>by iamdaudkhan</i></p>
+      <div class="search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Search a topic… (e.g. cars, India, AI)" autocomplete="off" aria-label="Search topics">
+      </div>
+    </header>
+    <div class="count" id="count"></div>
+    <main class="grid" id="grid"></main>
+    <div class="empty" id="empty">No topic found. Try another word.</div>
+  </div>
+
+  <section id="topic">
+    <button class="back" id="back">← All Topics</button>
+    <div class="thead">
+      <div class="ico" id="tIcon"></div>
+      <h2 id="tTitle"></h2>
+      <p id="tSub"></p>
+    </div>
+    <ol class="list" id="list"></ol>
+    <p class="disc">Rankings are based on commonly reported data and change over time. Figures are approximate and for information only.</p>
+  </section>
+</div>
+<footer><b>TopSphere</b> — Discover the Top 10 of everything.<br><i>by iamdaudkhan</i></footer>
+
+<script>
+var T=[
+{id:"social-media-apps",i:"📱",t:"Social Media Apps",s:"By monthly active users (approx.)",l:[
+["Facebook","Largest social network"],["YouTube","Video platform"],["WhatsApp","Messaging"],["Instagram","Photos & Reels"],["TikTok","Short videos"],["WeChat","China's super-app"],["Messenger","Meta chat app"],["Telegram","Cloud messaging"],["Snapchat","Camera & stories"],["X (Twitter)","Real-time posts"]]},
+{id:"shoe-brands",i:"👟",t:"Shoe Brands",s:"Popular & valuable brands worldwide",l:[
+["Nike","Global market leader"],["Adidas","Three-stripe icon"],["Puma","Sport & lifestyle"],["New Balance","Retro & running"],["Skechers","Comfort footwear"],["ASICS","Running specialist"],["Converse","Classic sneakers"],["Vans","Skate culture"],["Reebok","Fitness heritage"],["Hoka","Cushioned running"]]},
+{id:"watch-brands",i:"⌚",t:"Watch Brands",s:"Prestige & popularity",l:[
+["Rolex","Most recognised luxury watch"],["Patek Philippe","Swiss haute horlogerie"],["Audemars Piguet","Royal Oak maker"],["Omega","Olympic timekeeper"],["Cartier","Jewellery-house watches"],["Richard Mille","Ultra-modern luxury"],["TAG Heuer","Sporty Swiss"],["Seiko","Japanese precision"],["Casio","G-Shock & more"],["Tissot","Affordable Swiss"]]},
+{id:"youtubers",i:"▶️",t:"Famous YouTubers",s:"By subscribers — channel ranks change often",l:[
+["MrBeast","Challenges & philanthropy"],["T-Series","Indian music label"],["Cocomelon","Kids' nursery rhymes"],["Sets India","Indian entertainment"],["Kids Diana Show","Kids' content"],["Like Nastya","Kids' family fun"],["Vlad and Niki","Kids' toys & play"],["Zee Music Company","Indian music"],["WWE","Pro wrestling"],["PewDiePie","Gaming legend"]]},
+{id:"car-brands",i:"🚗",t:"Car Brands",s:"By global popularity & sales",l:[
+["Toyota","World's top seller"],["Volkswagen","German volume leader"],["Hyundai","Korean value & tech"],["Honda","Reliable & efficient"],["Ford","American icon"],["BMW","Ultimate driving machine"],["Mercedes-Benz","Luxury benchmark"],["Suzuki","Small-car expert"],["Tesla","EV pioneer"],["Audi","Premium tech"]]},
+{id:"smartphone-brands",i:"📲",t:"Smartphone Brands",s:"By global shipments (approx.)",l:[
+["Apple","iPhone"],["Samsung","Galaxy series"],["Xiaomi","Value flagships"],["vivo","Camera focus"],["OPPO","Fast charging"],["Transsion","Tecno, Infinix, itel"],["Honor","Premium & mid-range"],["Motorola","Clean Android"],["realme","Youth-focused"],["Huawei","Strong in China"]]},
+{id:"laptop-brands",i:"💻",t:"Laptop Brands",s:"Popular PC makers",l:[
+["Lenovo","Largest PC maker"],["HP","Everyday & business"],["Dell","Business & XPS"],["Apple","MacBook"],["ASUS","Gaming & creators"],["Acer","Value laptops"],["MSI","Gaming rigs"],["Microsoft","Surface"],["Samsung","Galaxy Book"],["Razer","Premium gaming"]]},
+{id:"ai-tools",i:"🤖",t:"AI Tools",s:"Widely used AI products",l:[
+["ChatGPT","Chat assistant by OpenAI"],["Google Gemini","Google's AI assistant"],["Microsoft Copilot","AI in Windows & Office"],["Perplexity","AI answer engine"],["Claude","AI assistant by Anthropic"],["DeepSeek","Open-weight models"],["Midjourney","AI image art"],["Grok","AI from xAI"],["GitHub Copilot","AI coding helper"],["ElevenLabs","AI voice"]]},
+{id:"gaming-consoles",i:"🎮",t:"Gaming Consoles",s:"Best-selling consoles of all time (approx.)",l:[
+["PlayStation 2","Over 155 million sold"],["Nintendo DS","Dual-screen handheld"],["Nintendo Switch","Hybrid console"],["Game Boy / Color","Handheld pioneer"],["PlayStation 4","8th-gen leader"],["PlayStation (PS1)","Started the dynasty"],["Wii","Motion gaming"],["PlayStation 3","Blu-ray era"],["Xbox 360","Xbox's best seller"],["Game Boy Advance","Classic handheld"]]},
+{id:"tech-companies",i:"🏢",t:"Tech Companies",s:"By market value (order changes often)",l:[
+["Nvidia","AI chips leader"],["Microsoft","Windows, Azure, Office"],["Apple","iPhone maker"],["Alphabet","Google's parent"],["Amazon","E-commerce & AWS"],["Meta","Facebook, Instagram, WhatsApp"],["Broadcom","Semiconductors"],["TSMC","World's top chip foundry"],["Tesla","EVs & energy"],["Samsung Electronics","Phones & chips"]]},
+{id:"luxury-fashion",i:"👜",t:"Luxury Fashion Brands",s:"Top fashion houses",l:[
+["Louis Vuitton","Iconic monogram"],["Hermès","Birkin & Kelly bags"],["Chanel","Timeless Parisian chic"],["Gucci","Italian boldness"],["Dior","Haute couture"],["Prada","Minimal luxury"],["Saint Laurent","Modern Parisian"],["Burberry","British heritage"],["Balenciaga","Avant-garde"],["Versace","Glamorous Italian"]]},
+{id:"perfume-brands",i:"🧴",t:"Perfume Brands",s:"Popular fragrance houses",l:[
+["Chanel","No. 5 legacy"],["Dior","Sauvage & J'adore"],["Tom Ford","Private Blend"],["Creed","Aventus fame"],["Giorgio Armani","Acqua di Giò"],["Yves Saint Laurent","Libre & Y"],["Versace","Eros"],["Gucci","Bloom & Guilty"],["Jo Malone London","Elegant & simple"],["Paco Rabanne","1 Million"]]},
+{id:"sportswear-brands",i:"🏃",t:"Sportswear Brands",s:"Athletic apparel leaders",l:[
+["Nike","Just Do It"],["Adidas","Impossible is Nothing"],["Puma","Forever Faster"],["Lululemon","Premium activewear"],["Under Armour","Performance gear"],["New Balance","Heritage sport"],["ASICS","Sound mind, sound body"],["Reebok","Fitness icon"],["Fila","Italian sportswear"],["Decathlon","Sports for all"]]},
+{id:"fast-food-chains",i:"🍔",t:"Fast Food Chains",s:"Popular chains worldwide",l:[
+["McDonald's","Golden Arches"],["Starbucks","Coffee giant"],["Subway","Made-to-order subs"],["KFC","Fried chicken"],["Burger King","Home of the Whopper"],["Domino's","Pizza delivery"],["Pizza Hut","Pan pizza"],["Taco Bell","Tex-Mex"],["Chick-fil-A","US favourite"],["Wendy's","Fresh burgers"]]},
+{id:"chocolate-brands",i:"🍫",t:"Chocolate Brands",s:"Loved by millions",l:[
+["Cadbury","Dairy Milk"],["Ferrero Rocher","Gift favourite"],["Hershey's","American classic"],["Snickers","Peanut & caramel"],["Lindt","Swiss premium"],["Kinder","Joy & surprise"],["Toblerone","Triangle bar"],["Milka","Alpine milk"],["Godiva","Belgian luxury"],["KitKat","Have a break"]]},
+{id:"soft-drink-brands",i:"🥤",t:"Soft Drink Brands",s:"Fizz favourites",l:[
+["Coca-Cola","World's best-known drink"],["Pepsi","Eternal rival"],["Fanta","Fruity orange"],["Sprite","Lemon-lime"],["Dr Pepper","Unique blend"],["Mountain Dew","Citrus kick"],["7UP","Clear & crisp"],["Thums Up","India's strong cola"],["Schweppes","Mixers & tonic"],["Limca","Indian lemon fizz"]]},
+{id:"street-foods-india",i:"🥘",t:"Street Foods of India",s:"Flavours from every corner",l:[
+["Pani Puri / Golgappa","Crispy, tangy, spicy"],["Vada Pav","Mumbai's burger"],["Samosa","Fried & stuffed"],["Chaat","Sweet-sour crunch"],["Pav Bhaji","Buttery mash with bread"],["Momos","Himalayan dumplings"],["Dosa","South Indian crepe"],["Kathi Roll","Wrapped delight"],["Chole Bhature","Punjabi favourite"],["Jalebi","Syrupy sweet"]]},
+{id:"richest-people",i:"💰",t:"Richest People in the World",s:"By net worth — order changes daily",l:[
+["Elon Musk","Tesla, SpaceX, xAI"],["Larry Ellison","Oracle"],["Larry Page","Google co-founder"],["Mark Zuckerberg","Meta"],["Jeff Bezos","Amazon"],["Sergey Brin","Google co-founder"],["Jensen Huang","Nvidia"],["Bernard Arnault","LVMH"],["Warren Buffett","Berkshire Hathaway"],["Steve Ballmer","Ex-Microsoft CEO"]]},
+{id:"richest-indians",i:"🇮🇳",t:"Richest Indians",s:"By net worth (approx., changes often)",l:[
+["Mukesh Ambani","Reliance Industries"],["Gautam Adani","Adani Group"],["Shiv Nadar","HCL"],["Savitri Jindal & family","Jindal Group"],["Dilip Shanghvi","Sun Pharma"],["Cyrus Poonawalla","Serum Institute"],["Kumar Birla","Aditya Birla Group"],["Radhakishan Damani","DMart"],["Lakshmi Mittal","ArcelorMittal"],["Sunil Mittal","Bharti Airtel"]]},
+{id:"highest-paid-actors",i:"🎬",t:"Highest-Paid Actors",s:"Based on Forbes-style yearly lists — varies by year",l:[
+["Dwayne Johnson","Hollywood action star"],["Adam Sandler","Netflix comedies"],["Tom Cruise","Top Gun, Mission: Impossible"],["Will Smith","Blockbuster veteran"],["Robert Downey Jr.","Iron Man"],["Ryan Reynolds","Deadpool"],["Shah Rukh Khan","Bollywood's Badshah"],["Leonardo DiCaprio","Oscar winner"],["Jackie Chan","Action legend"],["Akshay Kumar","Bollywood action-comedy"]]},
+{id:"bollywood-blockbusters",i:"🍿",t:"Bollywood Blockbuster Movies",s:"Among the biggest earners of all time",l:[
+["Dangal","Aamir Khan wrestling drama"],["Jawan","Shah Rukh Khan"],["Pathaan","Shah Rukh Khan"],["Bajrangi Bhaijaan","Salman Khan"],["PK","Aamir Khan"],["Sultan","Salman Khan"],["Animal","Ranbir Kapoor"],["Gadar 2","Sunny Deol"],["Sanju","Ranbir Kapoor"],["Dhoom 3","Aamir Khan"]]},
+{id:"ott-platforms",i:"📺",t:"OTT Platforms",s:"Popular streaming services",l:[
+["Netflix","Largest global streamer"],["Disney+","Disney, Marvel, Star Wars"],["Amazon Prime Video","Shows & free shipping"],["HBO Max","Prestige series"],["YouTube","Free & Premium"],["Hulu","US streaming"],["Paramount+","CBS & Paramount"],["Apple TV","Apple originals"],["Peacock","NBCUniversal"],["JioHotstar","India's sports leader"]]},
+{id:"cricketers",i:"🏏",t:"Cricketers of All Time",s:"A popular opinion-based ranking",l:[
+["Don Bradman","Test average of 99.94"],["Sachin Tendulkar","Master Blaster"],["Virat Kohli","Run-chase king"],["Viv Richards","Fearless West Indian"],["Shane Warne","Spin wizard"],["Brian Lara","Record 400*"],["Ricky Ponting","Champion captain"],["Garfield Sobers","Greatest all-rounder"],["Muttiah Muralitharan","Most Test wickets"],["MS Dhoni","Captain Cool"]]},
+{id:"highest-paid-athletes",i:"🏆",t:"Highest-Paid Athletes",s:"Salary + endorsements — varies by year",l:[
+["Cristiano Ronaldo","Football"],["Lionel Messi","Football"],["LeBron James","Basketball"],["Stephen Curry","Basketball"],["Jon Rahm","Golf"],["Kevin Durant","Basketball"],["Giannis Antetokounmpo","Basketball"],["Neymar Jr.","Football"],["Kylian Mbappé","Football"],["Max Verstappen","Formula 1"]]},
+{id:"tallest-buildings",i:"🏙️",t:"Tallest Buildings",s:"Completed buildings (approx.)",l:[
+["Burj Khalifa","Dubai — 828 m"],["Merdeka 118","Kuala Lumpur — 679 m"],["Shanghai Tower","Shanghai — 632 m"],["Abraj Al-Bait Clock Tower","Mecca — 601 m"],["Ping An Finance Centre","Shenzhen — 599 m"],["Lotte World Tower","Seoul — 555 m"],["One World Trade Center","New York — 541 m"],["Guangzhou CTF Finance Centre","Guangzhou — 530 m"],["Tianjin CTF Finance Centre","Tianjin — 530 m"],["CITIC Tower","Beijing — 528 m"]]},
+{id:"airlines",i:"✈️",t:"Airlines",s:"Often ranked best by passengers & reviews",l:[
+["Qatar Airways","Award-winning service"],["Singapore Airlines","Premium comfort"],["Emirates","Dubai's flagship"],["ANA","Japanese excellence"],["Cathay Pacific","Hong Kong carrier"],["Japan Airlines","Punctual & refined"],["Turkish Airlines","Most countries served"],["Air New Zealand","Innovative cabins"],["EVA Air","Taiwan's top airline"],["Etihad Airways","Abu Dhabi luxury"]]},
+{id:"tourist-places",i:"🌍",t:"Most Visited Tourist Places",s:"Popular destination cities",l:[
+["Paris","France"],["London","United Kingdom"],["Dubai","UAE"],["Istanbul","Türkiye"],["Bangkok","Thailand"],["Tokyo","Japan"],["Singapore","Singapore"],["New York City","USA"],["Rome","Italy"],["Hong Kong","China SAR"]]},
+{id:"richest-countries",i:"🏦",t:"Richest Countries",s:"By GDP per capita (approx.)",l:[
+["Luxembourg","Finance hub"],["Singapore","Trade & tech hub"],["Ireland","Global tech HQs"],["Norway","Oil & gas wealth"],["Qatar","Natural gas"],["Switzerland","Banking & precision"],["United States","Largest economy"],["Iceland","Energy & fishing"],["Denmark","High-income welfare state"],["Netherlands","Trade & logistics"]]},
+{id:"electric-car-brands",i:"⚡",t:"Electric Car Brands",s:"Leading EV makers",l:[
+["BYD","World's EV volume leader"],["Tesla","EV pioneer"],["Geely","Zeekr, Volvo, Polestar"],["Volkswagen","ID. series"],["BMW","i-series"],["Hyundai","Ioniq"],["Kia","EV6 & EV9"],["Mercedes-Benz","EQ range"],["Rivian","Electric trucks & SUVs"],["Tata Motors","India's EV leader"]]},
+{id:"mobile-games",i:"🕹️",t:"Mobile Games",s:"Hugely popular on phones",l:[
+["Subway Surfers","Endless runner"],["Free Fire","Battle royale"],["PUBG Mobile / BGMI","Battle royale"],["Candy Crush Saga","Match-3 puzzle"],["Clash of Clans","Strategy"],["Roblox","Play & create"],["Call of Duty: Mobile","FPS action"],["Honor of Kings","MOBA hit"],["Minecraft","Build & survive"],["Ludo King","Indian family favourite"]]}
+];
+
+var grid=document.getElementById("grid"),q=document.getElementById("q"),
+countEl=document.getElementById("count"),emptyEl=document.getElementById("empty"),
+home=document.getElementById("home"),topic=document.getElementById("topic"),
+list=document.getElementById("list");
+
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+
+function renderGrid(filter){
+  var f=(filter||"").trim().toLowerCase(),n=0,h="";
+  T.forEach(function(x,idx){
+    var hay=(x.t+" "+x.s+" "+x.l.map(function(r){return r[0]}).join(" ")).toLowerCase();
+    if(!f||hay.indexOf(f)>-1){
+      n++;
+      h+='<button class="card" data-id="'+x.id+'" aria-label="Open Top 10 '+esc(x.t)+'">'+
+         '<span class="ico">'+x.i+'</span><span class="top10">Top 10</span><span class="ctitle">'+esc(x.t)+'</span></button>';
+    }
+  });
+  grid.innerHTML=h;
+  emptyEl.style.display=n?"none":"block";
+  countEl.textContent=f?n+" of "+T.length+" topics":T.length+" topics";
+}
+
+function openTopic(id){
+  var x=T.filter(function(t){return t.id===id})[0];
+  if(!x){showHome();return}
+  document.getElementById("tIcon").textContent=x.i;
+  document.getElementById("tTitle").innerHTML="<span>Top 10</span> "+esc(x.t);
+  document.getElementById("tSub").textContent=x.s;
+  list.innerHTML=x.l.map(function(r,i){
+    return '<li class="item" style="animation-delay:'+(i*60)+'ms"><div class="rank">#'+(i+1)+'</div>'+
+      '<div><div class="name">'+esc(r[0])+'</div><div class="note">'+esc(r[1])+'</div></div></li>';
+  }).join("");
+  home.style.display="none";topic.style.display="block";
+  document.title="Top 10 "+x.t+" — TopSphere";
+  window.scrollTo(0,0);
+}
+function showHome(){
+  topic.style.display="none";home.style.display="block";
+  document.title="TopSphere — Discover the Top 10 of Everything";
+}
+function route(){
+  var id=decodeURIComponent(location.hash.replace("#",""));
+  id?openTopic(id):showHome();
+}
+
+grid.addEventListener("click",function(e){
+  var c=e.target.closest(".card");
+  if(c)location.hash=c.getAttribute("data-id");
+});
+document.getElementById("back").addEventListener("click",function(){
+  if(history.length>1&&location.hash){history.back()}else{location.hash=""}
+});
+q.addEventListener("input",function(){renderGrid(q.value)});
+window.addEventListener("hashchange",route);
+
+renderGrid("");
+route();
+</script>
+</body>
+</html>
